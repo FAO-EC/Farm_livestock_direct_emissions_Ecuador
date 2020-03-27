@@ -1,0 +1,19 @@
+id,name,digestibility_percentage_min,digestibility_percentage_max,nitrogen_content_min,nitrogen_content_max
+1,ninguno,33,33,19,19
+2,Achicoria,61.78,61.78,19,19
+3,Alfalfa,68.84,68.84,19,19
+4,Brachiarias,46.95,72.1,19,19
+5,Estrella,33,70,19,19
+6,Festuca,66.5,66.5,19,19
+7,Gramalote,51.46,58.9,19,19
+8,Kikuyo,42.2,65.9,19,19
+9,King grass,46.32,72.7,19,19
+10,Llantén,56.64,59.67,19,19
+11,Maní forrajero,52.65,64.87,19,19
+12,Maralfalfa,60.29,74.14,19,19
+13,Pasto azul,49.41,56.64,19,19
+14,Pasto miel,55.7,69.3,19,19
+15,Rye grass,49.51,69.75,19,19
+16,Saboya,50.2,70,19,19
+17,Trébol blanco,51.16,74.7,19,19
+18,Trébol rojo,61.32,66.78,19,19

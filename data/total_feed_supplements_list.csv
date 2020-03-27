@@ -1,0 +1,16 @@
+id,name,digestibility_percentage,nitrogen_content,dry_matter_percentage,adult_female_feed_kg,other_categories_feed_kg
+1,heno o ensilaje de pasto,52,14,33.02,0,0
+2,heno o ensilaje de leguminosas y pasto,54,23,20.58,0,0
+3,ensilaje de maiz,68.7,14,27.42,0,0
+4,residuos de trigo,45.2,6,32.7,0,0
+5,residuos de maiz,57.6,10,25,0,0
+6,residuos de arroz,46.5,6,21.15,0,0
+7,residuos de cana,54.5,9,32.7,0,0
+8,granos de maiz,85.9,16,86.43,0,0
+9,residuos de otros granos,44.4,6.66,86.43,0,0
+10,palmiste,71.2,27,88,0,0
+11,melaza,82.5,9.4,70.6,0,0
+12,balanceado,83.55,30.32,87.05,0,0
+13,ensilaje de alfalfa,60.3,29,23.57,0,0
+14,subproductos de cerveza,60.6,47.2,88.6,0,0
+15,ninguno,0,0,0,0,0
