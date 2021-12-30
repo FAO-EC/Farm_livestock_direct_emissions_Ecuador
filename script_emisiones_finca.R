@@ -2,7 +2,8 @@
 ## FARM LEVEL
 ## GANADERIA CLIMATICAMENTE INTELIGENTE
 ## 2019
-
+fdir<-"C:/dd/Google Drive/RNN_LU/BreedingSyst/gleam_ec/Farm_livestock_direct_emissions_Ecuador-master"
+setwd(fdir)
 ## ARMANDO RIVERA
 ## armando.d.rivera@outlook.com
 
@@ -183,7 +184,7 @@ farm_emissions = function(
   ## EMPRESARIAL = full technology in the farm, the livestock
   ## production goes to the industry or is exported
   ##
-  ## MAGAP. (2008). Metodología de Valoración de 
+  ## MAGAP. (2008). Metodolog?a de Valoraci?n de 
   ## Tierras Rurales
   
   ## Manure managment
@@ -216,10 +217,13 @@ farm_emissions = function(
   ## It avoids that the weight of young females
   ## are bigger than adult females
   ## -------------------------------------
-  if( adult_females > 0 & young_females > 0 & 
-      adult_females_weight < slaughtered_young_females_weight){
-    AFKG = slaughtered_young_females_weight #live weight of slaughtered young females
-    MFSKG = adult_females_weight #live weight of adult females
+  AFKG<-MFSKG<-NA
+  if( any(adult_females > 0 & young_females > 0 & 
+      adult_females_weight < slaughtered_young_females_weight)){
+    fltr<-adult_females > 0 & young_females > 0 & 
+      adult_females_weight < slaughtered_young_females_weight
+    AFKG[fltr] = slaughtered_young_females_weight[fltr] #live weight of slaughtered young females
+    MFSKG[fltr] = adult_females_weight[fltr] #live weight of adult females
   } else{
     AFKG = adult_females_weight #live weight of adult females
     MFSKG = slaughtered_young_females_weight #live weight of slaughtered young females
@@ -235,10 +239,13 @@ farm_emissions = function(
   ## It avoids that the weight of young males
   ## are bigger than adult males
   ## -------------------------------------
-  if(adult_males > 0 & young_males > 0 & 
-     adult_males_weight < slaughtered_young_males_weight){
-    AMKG = slaughtered_young_males_weight 
-    MMSKG = adult_males_weight
+  AMKG<-  MMSKG <- NA
+  if ( any(adult_males > 0 & young_males > 0 & 
+     adult_males_weight < slaughtered_young_males_weight) ) {
+    fltr<-adult_males > 0 & young_males > 0 & 
+           adult_males_weight < slaughtered_young_males_weight
+    AMKG[fltr] = slaughtered_young_males_weight [fltr]
+    MMSKG[fltr] = adult_males_weight[fltr]
   } else{
     AMKG = adult_males_weight
     MMSKG = slaughtered_young_males_weight
@@ -294,7 +301,9 @@ farm_emissions = function(
   
   ## Calves weight correction
   ## SEE PAGE 12 (GLEAM 2.0)
-  if(female_calves_weight == 0 & male_calves_weight > 0){
+  CKG<-NA
+  if(any(female_calves_weight == 0 & male_calves_weight > 0)){
+    <-any(female_calves_weight == 0 & male_calves_weight > 0)
     CKG = male_calves_weight
   }
   if(female_calves_weight > 0 & male_calves_weight == 0){
@@ -1481,15 +1490,19 @@ main_pasture_list = read.csv("input_pasture_main_list.csv")
 mixture_pasture_list = read.csv("input_pasture_mixture_list.csv")
 cut_pasture_list = read.csv("input_pasture_cut_list.csv")
 diet_list = read.csv("input_feed_supplements_list.csv")
-
-## FARM DATA
+## FARM db
 farm_data = read.csv("input_farm_data.csv")
-year = farm_data$fecha
-farm_name = farm_data$finca
+farm_data<-read.xlsx("archivopreguntas.xlsx",sheetIndex = 1)
 
+########################################################################################################################
+
+#Farm data
+year = farm_data$anio #year = farm_data$fecha
+farm_name = farm_data$finca
 longitude = farm_data$longitud
 latitude = farm_data$latitud
 main_product = farm_data$producto
+#Demog
 adult_females = farm_data$vacas
 adult_females_milk = farm_data$vacas_produccion
 young_females= farm_data$vaconas
@@ -1503,10 +1516,11 @@ death_adult_males= farm_data$toros_muertos
 death_male_calves= farm_data$terneros_muertos
 slaughtered_adult_females= farm_data$vacas_faenadas
 sold_adult_females= farm_data$vacas_vendidas
-slaughtered_adult_males= farm_data$toros_faenados
-sold_adult_males= farm_data$toros_vendidos
+slaughtered_adult_males= rep(0,nrow(farm_data))#slaughtered_adult_males= farm_data$toros_faenados
+sold_adult_males= rep(0,nrow(farm_data))#farm_data$toros_vendidos
 total_births= farm_data$partos_totales
-age_first_calving_months= farm_data$edad_primer_parto_meses
+age_first_calving_months= farm_data$edad_primer_parto_years*12#farm_data$edad_primer_parto_meses
+#Biometry & Production
 adult_females_weight= farm_data$peso_vacas
 female_calves_weight= farm_data$peso_terneras
 adult_males_weight= farm_data$peso_toros
@@ -1516,23 +1530,25 @@ slaughtered_young_males_weight= farm_data$peso_sacrificio_toretes
 milk_fat= farm_data$grasa_leche
 milk_protein= farm_data$proteina_leche
 milk_yield_liters_animal_day= farm_data$produccion_leche_litro_animal_dia
-lactancy_period_months= farm_data$periodo_lactancia_meses
+#Feed
 pasture_area_ha= farm_data$superficie_pastos_ha
-adult_females_feed_pasture_age= farm_data$edad_pasto_vacas
-other_categories_feed_pasture_age= farm_data$edad_pasto_otros
-mixture_pasture_ha= farm_data$superficie_mezclas
-adult_females_feed_cut_pasture_kg = farm_data$pasto_corte_vaca_kg
-other_categories_feed_cut_pasture_kg= farm_data$pasto_corte_otros_kg
+lactancy_period_months= farm_data$periodo_lactancia_dias/30.41#periodo_lactancia_meses
+adult_females_feed_pasture_age=3 #farm_data$edad_pasto_vacas
+other_categories_feed_pasture_age=3 #farm_data$edad_pasto_otros
+mixture_pasture_ha= farm_data$superficie_pastos_con_silvopastoril_ha#superficie_mezclas
+adult_females_feed_cut_pasture_kg = farm_data$alimento2_vacas#pasto_corte_vaca_kg
+other_categories_feed_cut_pasture_kg= farm_data$alimento2_otros#pasto_corte_otros_kg
 productive_system= farm_data$sistema_productivo
+#Manure
+manure_drylot= farm_data$excretas_corral_engorde#excretas_lote_secado
 manure_in_pastures= farm_data$excretas_sin_manejo
 manure_daily_spread= farm_data$excretas_dispersion_diaria
 manure_liquid_storage= farm_data$excretas_liquido_fango
 manure_compost= farm_data$excretas_compostaje
 manure_anaerobic= farm_data$excretas_digestor_anaerobico 
-manure_drylot= farm_data$excretas_lote_secado
 manure_solid= farm_data$excretas_almacenamiento_solido 
 manure_uncoveredlagoon= farm_data$excretas_laguna_anaerobica 
-manure_burned= farm_data$excretas_incinera 
+manure_burned= farm_data$excretas_incineracion
 
 results = farm_emissions(
   main_pasture_list,
